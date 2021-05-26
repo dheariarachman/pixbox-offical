@@ -6,17 +6,13 @@
 
 <script lang="ts">
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
-import { defineComponent, provide } from "vue";
-import orderStore from "./models/order/order.store";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "App",
 	components: {
 		IonApp,
 		IonRouterOutlet,
-	},
-	setup() {
-		provide("orders", orderStore);
 	},
 });
 </script>

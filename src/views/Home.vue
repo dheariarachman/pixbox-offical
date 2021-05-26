@@ -28,7 +28,7 @@
 							<ion-col>
 								<ion-card>
 									<ion-item
-										router-link="/order"
+										@click="movePageSend"
 										lines="none"
 										class="ion-text-center"
 									>
@@ -41,7 +41,7 @@
 							<ion-col>
 								<ion-card>
 									<ion-item
-										@click="() => router.push('/packing')"
+										@click="movePagePacking"
 										lines="none"
 										class="ion-text-center"
 									>
@@ -73,9 +73,8 @@ import {
 	IonPage,
 	alertController,
 } from "@ionic/vue";
-import { defineComponent, ref, inject } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import { Orders } from "../api/orders";
 export default defineComponent({
 	name: "Home",
 	components: {
@@ -91,12 +90,15 @@ export default defineComponent({
 		IonPage,
 	},
 	setup() {
-		// Inject
-		const orders = inject("orders");
-
 		// Data
 		const router = useRouter();
 		const orderCode = ref("");
+
+		const submitValue = () => {
+			router.push(`/order/${orderCode.value}`).then(() => {
+				orderCode.value = "";
+			});
+		};
 
 		const presentAlert = async (message: string) => {
 			const alert = await alertController.create({
@@ -108,37 +110,28 @@ export default defineComponent({
 
 			await alert.present();
 			await alert.onDidDismiss().then(() => {
-				orderCode.value = "";
 				console.log("onDidDismiss resolved with role");
 			});
 		};
 
-		const submitValue = () => {
-			Orders.getOrderById(orderCode.value)
-				.then((response) => {
-					if (response.data) {
-						console.log(response.data);
-						// orders.methods.updateDetail(response.data);
+		const movePageSend = () => {
+			presentAlert(
+				"Pengiriman Barang melalui Aplikasi, akan Segera Hadir. Silahkan Coba fitur tracking terlebih dahulu"
+			);
+		};
 
-						router
-							.push(`/order/${response.data.order_code}`)
-							.then(() => {
-								orderCode.value = "";
-							});
-					} else {
-						console.log(response);
-						presentAlert(response.message);
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
+		const movePagePacking = () => {
+			presentAlert(
+				"Packing Barang melalui Aplikasi, akan Segera Hadir. Silahkan Coba fitur tracking terlebih dahulu"
+			);
 		};
 
 		return {
 			router,
 			orderCode,
 			submitValue,
+			movePagePacking,
+			movePageSend,
 		};
 	},
 });
