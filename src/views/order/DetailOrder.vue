@@ -21,11 +21,11 @@
 					<div class="dot-header">
 						<div class="dot-header-start">
 							<ion-icon :icon="qrCodeOutline"></ion-icon>
-							<p>BRL2021052525355</p>
+							<p>{{ route.params.order_id }}</p>
 						</div>
 
 						<div class="dot-header-end">
-							waiting
+							{{ order?.status }}
 						</div>
 					</div>
 					<div class="dot-order-date">
@@ -160,6 +160,8 @@ export default defineComponent({
 			homeOutline,
 			locationSharp,
 			paperPlane,
+
+			route,
 		};
 	},
 });
